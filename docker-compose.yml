@@ -1,0 +1,57 @@
+version: '2'
+services:
+  web:
+    image: centos-ssh:6
+    hostname: web
+    networks:
+      master:
+        ipv4_address: 192.168.100.1
+      backup:
+    expose:
+      - 4848
+      - 8080
+    volumes:
+      - ${HOME}/:${HOME}/:rw
+      - ${HOME}/apps/anaconda3/:${HOME}/apps/anaconda3/:ro
+      - /opt/toolbox/:/opt/toolbox/:ro
+    depends_on:
+      - app
+  app:
+    image: centos-ssh:6
+    hostname: app
+    networks:
+      master:
+        ipv4_address: 192.168.100.2
+      backup:
+    expose:
+      - 4848
+      - 8080
+    volumes:
+      - ${HOME}/:${HOME}/:rw
+      - ${HOME}/apps/anaconda3/:${HOME}/apps/anaconda3/:ro
+      - /opt/toolbox/:/opt/toolbox/:ro
+    depends_on:
+      - db
+  db:
+    image: wnameless/oracle-xe-11g
+    hostname: db
+    networks:
+      master:
+        ipv4_address: 192.168.100.3
+      backup:
+    expose:
+      - 22
+      - 1521
+      - 8080
+    volumes:
+      - /opt/toolbox/:/opt/toolbox/:ro
+    environment:
+      - ORACLE_ENABLE_XDB=true
+networks:
+  master:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.100.0/24
+          gateway: 192.168.100.254
+  backup:
