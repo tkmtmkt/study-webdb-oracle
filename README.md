@@ -2,7 +2,7 @@ study-webdb-oracle
 ==================
 
 ```sh
-$ docker build --rm -t centos-ssh:6 .
+$ docker build --rm -t centos-ssh:6.8 .
 ```
 
 

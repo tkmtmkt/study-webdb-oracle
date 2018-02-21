@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Install OpenSSH
-yum -q -y update &&
 yum -q -y install openssh-server openssh-clients &&
 mkdir /var/run/sshd &&
 
