@@ -11,9 +11,10 @@ services:
       - 4848
       - 8080
     volumes:
-      - ${HOME}/:${HOME}/:rw
-      - ${HOME}/apps/anaconda3/:${HOME}/apps/anaconda3/:ro
       - /opt/toolbox/:/opt/toolbox/:ro
+      - ${HOME}/.ssh/:${HOME}/.ssh/:ro
+      - ${HOME}/.dotfiles/:${HOME}/.dotfiles/:ro
+      - ${HOME}/opt/:${HOME}/opt/:ro
     depends_on:
       - app
   app:
@@ -27,9 +28,10 @@ services:
       - 4848
       - 8080
     volumes:
-      - ${HOME}/:${HOME}/:rw
-      - ${HOME}/apps/anaconda3/:${HOME}/apps/anaconda3/:ro
       - /opt/toolbox/:/opt/toolbox/:ro
+      - ${HOME}/.ssh/:${HOME}/.ssh/:ro
+      - ${HOME}/.dotfiles/:${HOME}/.dotfiles/:ro
+      - ${HOME}/opt/:${HOME}/opt/:ro
     depends_on:
       - db
   db:
@@ -45,6 +47,9 @@ services:
       - 8080
     volumes:
       - /opt/toolbox/:/opt/toolbox/:ro
+      - ${HOME}/.ssh/:/u01/app/oracle/.ssh/:ro
+      - ${HOME}/.dotfiles/:/u01/app/oracle/.dotfiles/:ro
+      - ${HOME}/opt/:/u01/app/oracle/opt/:ro
     environment:
       - ORACLE_ENABLE_XDB=true
 networks:
