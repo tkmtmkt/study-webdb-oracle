@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Change root password
+echo 'root:admin' | chpasswd &&
+
 # Install OpenSSH
 yum -q -y install openssh-server openssh-clients &&
 mkdir /var/run/sshd &&
@@ -11,7 +14,8 @@ ssh-keygen -t dsa   -N '' -f /etc/ssh/ssh_host_dsa_key > /dev/null &&
 ssh-keygen -t ecdsa -N '' -f /etc/ssh/ssh_host_ecdsa_key > /dev/null &&
 
 # Setup user
-echo 'root:admin' | chpasswd &&
+useradd -u 1000 -m setup
+echo 'setup:manager' | chpasswd &&
 
 # Remove installation files
 rm -r /assets/
