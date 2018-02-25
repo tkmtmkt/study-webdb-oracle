@@ -1,55 +1,61 @@
 version: '2'
 services:
-  web:
+  testweb:
     image: centos-ssh:6.8
-    hostname: web
+    hostname: testweb
     networks:
       master:
-        ipv4_address: 192.168.100.1
+        ipv4_address: 192.168.100.71
       backup:
-    expose:
-      - 4848
-      - 8080
+    ports:
+      - "17148:4848"
+      - "17180:8080"
     volumes:
-      - /opt/toolbox/:/opt/toolbox/:ro
-      - ${HOME}/.ssh/:${HOME}/.ssh/:ro
-      - ${HOME}/.dotfiles/:${HOME}/.dotfiles/:ro
-      - ${HOME}/opt/:${HOME}/opt/:ro
+      - ${HOME}/.ssh/:/home/setup/.ssh/:ro
+      - ${HOME}/.dotfiles/:/home/setup/.dotfiles/:ro
+      - ${HOME}/opt/:/home/setup/opt/:ro
+      - ./common/opt/toolbox/:/opt/toolbox/:ro
+      - ./common/opt/payara41/:/opt/payara41/:ro
+      - ./testweb/var/opt/payara41/:/var/opt/payara41/:rw
+      - ./testweb/home/setup/:/home/setup/:rw
     depends_on:
-      - app
-  app:
+      - testapp
+  testapp:
     image: centos-ssh:6.8
-    hostname: app
+    hostname: testapp
     networks:
       master:
-        ipv4_address: 192.168.100.2
+        ipv4_address: 192.168.100.72
       backup:
-    expose:
-      - 4848
-      - 8080
+    ports:
+      - "17248:4848"
+      - "17280:8080"
     volumes:
-      - /opt/toolbox/:/opt/toolbox/:ro
-      - ${HOME}/.ssh/:${HOME}/.ssh/:ro
-      - ${HOME}/.dotfiles/:${HOME}/.dotfiles/:ro
-      - ${HOME}/opt/:${HOME}/opt/:ro
+      - ${HOME}/.ssh/:/home/setup/.ssh/:ro
+      - ${HOME}/.dotfiles/:/home/setup/.dotfiles/:ro
+      - ${HOME}/opt/:/home/setup/opt/:ro
+      - ./common/opt/payara41/:/opt/payara41/:ro
+      - ./common/opt/toolbox/:/opt/toolbox/:ro
+      - ./testapp/var/opt/payara41/:/var/opt/payara41/:rw
+      - ./testapp/home/setup/:/home/setup/:rw
     depends_on:
-      - db
-  db:
+      - testdb
+  testdb:
     image: wnameless/oracle-xe-11g
-    hostname: db
+    hostname: testdb
     networks:
       master:
-        ipv4_address: 192.168.100.3
+        ipv4_address: 192.168.100.73
       backup:
-    expose:
-      - 22
-      - 1521
-      - 8080
+    ports:
+      - "1521:1521"
+      - "17322:22"
+      - "17380:8080"
     volumes:
-      - /opt/toolbox/:/opt/toolbox/:ro
       - ${HOME}/.ssh/:/u01/app/oracle/.ssh/:ro
       - ${HOME}/.dotfiles/:/u01/app/oracle/.dotfiles/:ro
       - ${HOME}/opt/:/u01/app/oracle/opt/:ro
+      - /opt/toolbox/:/opt/toolbox/:ro
     environment:
       - ORACLE_ENABLE_XDB=true
 networks:
@@ -58,5 +64,5 @@ networks:
       driver: default
       config:
         - subnet: 192.168.100.0/24
-          gateway: 192.168.100.254
+          gateway: 192.168.100.1
   backup:
