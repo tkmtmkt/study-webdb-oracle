@@ -9,7 +9,8 @@ services:
       backup:
     ports:
       - "17148:4848"
-      - "17180:8080"
+      - "17180:28080"
+      - "17181:28081"
     volumes:
       - ${HOME}/.ssh/:/home/setup/.ssh/:ro
       - ${HOME}/.dotfiles/:/home/setup/.dotfiles/:ro
@@ -29,7 +30,8 @@ services:
       backup:
     ports:
       - "17248:4848"
-      - "17280:8080"
+      - "17280:28080"
+      - "17281:28081"
     volumes:
       - ${HOME}/.ssh/:/home/setup/.ssh/:ro
       - ${HOME}/.dotfiles/:/home/setup/.dotfiles/:ro
