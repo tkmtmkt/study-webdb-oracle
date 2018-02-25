@@ -13,7 +13,7 @@ localedef -i ja_JP -f SHIFT_JIS -c -A /usr/share/locale/locale.alias ja_JP.SHIFT
 
 # Install OpenSSH
 yum -q -y install openssh-server openssh-clients &&
-mkdir /var/run/sshd &&
+mkdir -p /var/run/sshd &&
 
 # Generate host keys
 ssh-keygen -t rsa1  -N '' -f /etc/ssh/ssh_host_key > /dev/null &&
